@@ -1,0 +1,64 @@
+## Code Commented
+
+import requests  # Import the requests library to handle HTTP requests
+
+def get_crypto_data(crypto_id):
+    """Fetch cryptocurrency data from CoinGecko API."""
+    # Construct the API URL using the provided cryptocurrency ID
+    url = f"https://api.coingecko.com/api/v3/simple/price?ids={crypto_id}&vs_currencies=usd&include_market_cap=true&include_24hr_change=true"
+    
+    try:
+        # Send a GET request to the CoinGecko API
+        response = requests.get(url)
+        # Parse the JSON response into a Python dictionary
+        data = response.json()
+        
+        # Check if the requested cryptocurrency data is available
+        if crypto_id in data:
+            # Extract the current price in USD
+            price = data[crypto_id]['usd']
+            # Extract the market capitalization in USD
+            market_cap = data[crypto_id]['usd_market_cap']
+            # Extract the 24-hour price change percentage
+            price_change_24h = data[crypto_id]['usd_24h_change']
+            
+            # Print the cryptocurrency name and its current price
+            print(f"Cryptocurrency: {crypto_id.capitalize()}")
+            print(f"Current Price (USD): ${price:.2f}")
+            print(f"Market Cap (USD): ${market_cap:,.2f}")
+            print(f"24h Price Change: {price_change_24h:.2f}%")
+        else:
+            # Inform the user if the cryptocurrency is not found
+            print("Cryptocurrency not found.")
+    
+    except requests.exceptions.RequestException as e:
+        # Handle any exceptions that occur during the request
+        print(f"Error retrieving data: {e}")
+
+def main():
+    """Main function to run the cryptocurrency data retrieval."""
+    # Welcome message for the user
+    print("Welcome to the Cryptocurrency Price Checker")
+    # List of popular cryptocurrencies for the user to choose from
+    print("Here are some popular cryptocurrencies you can check:")
+    print("1. Bitcoin (BTC)")
+    print("2. Ethereum (ETH)")
+    print("3. Binance Coin (BNB)")
+    print("4. Cardano (ADA)")
+    print("5. Solana (SOL)")
+    print("6. Ripple (XRP)")
+    print("7. Polkadot (DOT)")
+    print("8. Litecoin (LTC)")
+    print("9. Chainlink (LINK)")
+    print("10. Dogecoin (DOGE)")
+    
+    # Prompt the user to enter their favorite cryptocurrency ID
+    crypto_id = input("Please enter your favorite cryptocurrency (or type the ID, e.g., bitcoin): ").strip().lower()
+    
+    print(" ")
+    # Call the function to get cryptocurrency data
+    get_crypto_data(crypto_id)
+
+# Entry point of the program
+if __name__ == "__main__":
+    main()  # Execute the main function
